@@ -1,0 +1,140 @@
+body {
+    margin: 0px;
+}
+
+#header {
+    /*background: #123673;*/
+    width: 100%;
+    height: 58px;
+    border-bottom: 2px solid black;
+}
+
+.uploadDiv {
+    display: block;
+    float: left;
+    height: 100%;
+    width: 40%;
+    width: -webkit-calc(50% - 100px);
+    width: -moz-calc(50% - 100px);
+    width: calc(50% - 100px);
+    margin: 0 auto;
+}
+
+.downloadDiv {
+    display: block;
+    float: right;
+    height: 100%;
+    width: 40%;
+    width: -webkit-calc(50% - 100px);
+    width: -moz-calc(50% - 100px);
+    width: calc(50% - 100px);
+    margin: 0 auto;
+}
+
+.button {
+    background: #2ECC71;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border: 1px solid black;
+    padding:  6px 4px;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #222222;
+    text-align: center;
+    width: 170px;
+    margin: 10 auto;
+}
+.button img {
+    position: relative;
+    width: 20px;
+    top: -2px;
+    vertical-align: middle;
+}
+
+/* Hide the system-provided file selection, replace it with a custom button */
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+.download {
+    cursor: pointer;
+}
+
+#content {
+    height: 90%;
+    height: -webkit-calc(100% - 60px);
+    height: -moz-calc(100% - 60px);
+    height: calc(100% - 60px);
+}
+
+.svgCanvas {
+    background: #e0e0e0;
+    font-size: 16px;
+    display: block;
+    float: left;
+    box-sizing: border-box;
+    width: 40%;
+    width: -webkit-calc(50% - 100px);
+    width: -moz-calc(50% - 100px);
+    width: calc(50% - 100px);
+    height: 100%;
+    text-align: center;
+}
+
+.optionsDiv {
+    /* background: #e0e0e0; */
+    display: inline-block;
+    width: 196px;
+    /*padding: 0 5px 0 5px;*/
+    border-width: 0 2px 0 2px;
+    border-style: solid;
+    border-color: black;
+    height: 100%;
+}
+
+.stlCanvas {
+    background: #e0e0e0;
+    font-size: 16px;
+    display: block;
+    float: right;
+    box-sizing: border-box;
+    width: 40%;
+    width: -webkit-calc(50% - 100px);
+    width: -moz-calc(50% - 100px);
+    width: calc(50% - 100px);
+    height: 100%;
+}
+
+.valign-middle {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+#uploadedSVG {
+    display: none;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 95%;
+    width: -webkit-calc(100% - 12px);
+    width: -moz-calc(100% - 12px);
+    width: calc(100% - 16px);
+    padding: 6px;
+    /* border: 2px dotted black; */
+    margin: 0 auto;
+}
+
