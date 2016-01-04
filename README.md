@@ -1,6 +1,8 @@
 # svg-to-stl
 Created to enable the 3D printing of plates for a [printing press] from a 2D vector graphic, this browser-based tool runs entirely in the local browser.
 
+### Demo
+You can try the tool [hosted directly from github].
 ### Screenshot
  ![Screenshot](https://github.com/rcalme/svg-to-stl/blob/master/screenshot.png)
 
@@ -32,6 +34,7 @@ svg-to-stl makes use of a number of other open source projects:
 
 
    [printing press]: <https://en.wikipedia.org/wiki/Printing_press>
+   [hosted directly from github]: <https://rawgit.com/ryancalme/svg-to-stl/master/SVGtoSTL.html.
    [WebGL]: <https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API>
    [File API]: <http://www.w3.org/TR/FileAPI/>
    [three.js]: <https://github.com/mrdoob/three.js>
