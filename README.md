@@ -3,6 +3,9 @@ Created to enable the 3D printing of plates for a [printing press] from a 2D vec
 
 ### Demo
 You can try the tool [hosted directly from github].
+
+There are example SVG files in [example-svg/Entypo].
+
 ### Screenshot
  ![Screenshot](https://github.com/rcalme/svg-to-stl/blob/master/screenshot.png)
 
@@ -37,6 +40,7 @@ svg-to-stl makes use of a number of other open source projects:
    [scalable vector graphics]: <https://en.wikipedia.org/wiki/Scalable_Vector_Graphics>
    [stereo-lithography]: <https://en.wikipedia.org/wiki/STL_(file_format)>
    [hosted directly from github]: <https://rawgit.com/ryancalme/svg-to-stl/master/SVGtoSTL.html>
+   [example-svg/Entypo]: </example-svg/Entypo>
    [WebGL]: <https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API>
    [File API]: <http://www.w3.org/TR/FileAPI/>
    [three.js]: <https://github.com/mrdoob/three.js>
