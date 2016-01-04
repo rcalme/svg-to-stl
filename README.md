@@ -2,7 +2,7 @@
 Created to enable the 3D printing of plates for a [printing press] from a 2D vector graphic, this browser-based tool runs entirely in the local browser.
 
 ### Screenshot
- [[https://github.com/rcalme/svg-to-stl/blob/master/screenshot.png|alt=svg-to-stl-screenshot]]
+ ![Screenshot](https://github.com/rcalme/svg-to-stl/blob/master/screenshot.png)
 
 ### Options
   - Specifying type height
