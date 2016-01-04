@@ -11,6 +11,8 @@ Created to enable the 3D printing of plates for a [printing press] from a 2D vec
     - Round and Rectangular base plates supported
     - Specifying base plate height
   - Optionally inverting type for printing press use
+  - Optionally flaring the base of type for added strength
+  - Reversing the winding order (CW/CCW) of SVG paths for incorrectly-built SVG files
 
 ### Requirements
 This tool requires javascript support, and a browser that can handle a [WebGL] canvas, and the [File API].
