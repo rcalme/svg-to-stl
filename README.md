@@ -34,7 +34,7 @@ svg-to-stl makes use of a number of other open source projects:
 
 
    [printing press]: <https://en.wikipedia.org/wiki/Printing_press>
-   [hosted directly from github]: <https://rawgit.com/ryancalme/svg-to-stl/master/SVGtoSTL.html.
+   [hosted directly from github]: <https://rawgit.com/ryancalme/svg-to-stl/master/SVGtoSTL.html>
    [WebGL]: <https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API>
    [File API]: <http://www.w3.org/TR/FileAPI/>
    [three.js]: <https://github.com/mrdoob/three.js>
