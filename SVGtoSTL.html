@@ -195,10 +195,42 @@
         // using the uploaded filename with a changed extension
         $(".download").on("click", function(){ saveSTL(scene, fileName.replace(/\.[^\.]*$/, "")); });
     });
+
+    // Check for webgl support
+    function webgl() {
+        try {
+            var canvas = document.createElement( 'canvas' ); return !! ( window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ) );
+        } catch ( e ) {
+            return false;
+        }
+    }
+
+    // Check for FileReader API support
+    function fileapi() {
+        return window.File && window.FileReader && window.FileList && window.Blob;
+    }
+
+    // Message to be built if webgl/fileapi support isn't present
+    function notSupportedMessage(element) {
+        $(element).empty();    // Clear the element
+        $(element).append($("<div class='container'><div class='notsupported'></div></div>"));
+        $(".notsupported").append($("<p class='big'>NOPE.</p>"));
+        $(".notsupported").append($("<p class='small'>Your browser doesn't seem to support WebGL and/or the FileReader API.</p>"));
+        $(".notsupported").append($("<p class='small'>Try a recent browser like <a href='https://www.google.com/chrome/browser/desktop' target='_blank'>Chrome</a> or <a href='https://www.mozilla.org/en-US/firefox' target='_blank'>Firefox</a>.</p>"));
+    }
+
+    // First check if support is present for the functions we'll use
+    if(!webgl() || !fileapi()) {
+        // Print a message that the browser doesn't support what we need
+        notSupportedMessage($("body")); 
+    }
+            
     // Remember the file name of the uploaded SVG
+    // we'll re-use this with a ".stl" extension at download time
     var fileName;
     // The 'path' tags from the SVG are all we need to keep.
     var svgPaths = [];
+
     // Pull options from the form
     function getFormSelections() {
         return {
@@ -226,7 +258,9 @@
         return;
       }
 
+      // To render the SVG on-screen
       var readerURL = new FileReader();
+      // To parse the xml within the SVG file
       var readerString = new FileReader();
 
       readerURL.onload = function (e) {
@@ -264,9 +298,11 @@
   <!-- Set up the 3D canvas, with rotation controls -->
   <script>
     var camera, scene, group, renderer, controls;
-    init();
-    $("#stlCanvas").append(renderer.domElement);
-    animate();
+    if(webgl()) {
+        init();
+        $("#stlCanvas").append(renderer.domElement);
+        animate();
+    }
 
     function init() {
         var divWidth  = (window.innerWidth/2)  - 100;
