@@ -43,6 +43,7 @@ svg-to-stl makes use of a number of other open source projects:
    [example-svg/Entypo]: </example-svg/Entypo>
    [WebGL]: <https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API>
    [File API]: <http://www.w3.org/TR/FileAPI/>
+   [Constructive Solid Geometry]: <https://en.wikipedia.org/wiki/Constructive_solid_geometry>
    [three.js]: <https://github.com/mrdoob/three.js>
    [D3]: <https://github.com/mbostock/d3>
    [ThreeCSG]: <https://github.com/chandlerprall/ThreeCSG>
