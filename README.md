@@ -19,6 +19,12 @@ There are example SVG files in [example-svg/Entypo].
   - Optionally flaring the base of type for added strength
   - Reversing the winding order (CW/CCW) of SVG paths for incorrectly-built SVG files
 
+### Known problems
+  - A hole in an SVG path should be defined by points in counter-clockwise order, where the shape outline is defined by points in a clockwise order, or vice versa. Some SVG creation tools don't do this correctly, and shapes render in 3D space as "inside out".
+    - You can try the "Reverse Winding Order" option to fix this, but it's possible to have both combinations of winding in the same file, ensuring that some part is always inside out.
+  - A hole that is not a hole, but an additional shape filled with background color will not render as a hole.
+  - SVG text elements are not supported. To render text, you need to convert the text to "outlines" or "paths" before saving the SVG file.
+
 ### Requirements
 This tool requires javascript support, and a browser that can handle a [WebGL] canvas, and the [File API].
 
@@ -29,6 +35,7 @@ This tool requires javascript support, and a browser that can handle a [WebGL] c
 svg-to-stl makes use of a number of other open source projects:
 * [three.js] - For WebGL rendering of a 3D scene
 * [D3] - For converting SVG paths into three.js geometries
+* [flatten.js] - For applying all heirarchical transforms in an SVG to its paths
 * [ThreeCSG] - For [Constructive Solid Geometry] support
 * [STLExporter] - For converting a three.js geometry into an ASCII STL file
 * [Spectrum] - For a javascript color-picker
@@ -46,6 +53,7 @@ svg-to-stl makes use of a number of other open source projects:
    [Constructive Solid Geometry]: <https://en.wikipedia.org/wiki/Constructive_solid_geometry>
    [three.js]: <https://github.com/mrdoob/three.js>
    [D3]: <https://github.com/mbostock/d3>
+   [flatten.js]: <https://gist.github.com/timo22345/9413158>
    [ThreeCSG]: <https://github.com/chandlerprall/ThreeCSG>
    [STLExporter]: <https://gist.github.com/kjlubick/fb6ba9c51df63ba0951f>
    [Spectrum]: <https://github.com/bgrins/spectrum>
