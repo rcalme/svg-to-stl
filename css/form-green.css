@@ -527,7 +527,7 @@ Not advised to edit stuff below this line
   transition: border-color 0.5s ease-in-out;
   border-radius:3px;
 
-  padding: 10px 10px 9px 2.3em;
+  padding: 5px 10px 4px 1.8em;
   
   outline:none;
   -o-box-sizing: border-box;
@@ -592,8 +592,8 @@ Not advised to edit stuff below this line
   position: absolute;
   font: 1em 'icons';
   vertical-align: top;
-  top: 15px;
-  left: 0.9em;
+  top: 8px;
+  left: 0.5em;
   pointer-events: none;
   color: #A2A6A8;
   z-index: 2;
