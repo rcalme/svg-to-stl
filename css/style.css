@@ -157,12 +157,7 @@ div.notsupported .small {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
-    width: 95%;
-    width: -webkit-calc(100% - 12px);
-    width: -moz-calc(100% - 12px);
-    width: calc(100% - 16px);
-    padding: 6px;
-    /* border: 2px dotted black; */
-    margin: 0 auto;
+    width: 96%;
+    height: 96%;
 }
 
