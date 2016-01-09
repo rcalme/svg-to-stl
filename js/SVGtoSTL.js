@@ -8,6 +8,7 @@ function clearGroup(group) {
 // Takes an SVG string, and returns a scene to render as a 3D STL
 function renderObject(paths, scene, group, options) {
     console.log("Rendering 3D object...");
+
     // Solid Color
     options.color = new THREE.Color( options.objectColor ); 
     options.material = (options.wantInvertedType) ?
@@ -23,6 +24,7 @@ function renderObject(paths, scene, group, options) {
     // Create an extrusion from the SVG path shapes
     var svgMesh = getExtrudedSvgObject( paths, options );
 
+    // Will hold the joined geometry
     var finalObj;
 
     // If we wanted a base plate, let's create that now
@@ -32,7 +34,7 @@ function renderObject(paths, scene, group, options) {
         svgMesh.geometry.applyMatrix( translateTransform );
 
         // Create Base plate mesh
-        var basePlateMesh = getBasePlateObject( options );
+        var basePlateMesh = getBasePlateObject( options, svgMesh );
 
         // For constructive solid geometry (CSG) actions
         baseCSG = new ThreeBSP( basePlateMesh );
@@ -60,7 +62,6 @@ function renderObject(paths, scene, group, options) {
     // Show the wireframe?
     if(options.wantWireFrame) {
         var wireframe = new THREE.WireframeHelper( finalObj, 0xffffff );
-        //var wireframe = new THREE.WireframeHelper( svgMesh, 0xffffff );
         group.add( wireframe );
     }
     // Show normals?
@@ -75,24 +76,34 @@ function renderObject(paths, scene, group, options) {
     }
 };
 
-function getBasePlateObject( options ) {
+// Creates a three.js Mesh object for a base plate
+function getBasePlateObject( options, svgMesh ) {
     var basePlateMesh;
+    
     // If we asked for a rectangle
     if(options.basePlateShape==="Rectangular") {
+        // Determine the finished size of the extruded SVG with potential bevel
+        var svgBoundBox = svgMesh.geometry.boundingBox;
+        var svgWidth  = (svgBoundBox.max.x - svgBoundBox.min.x);
+        var svgHeight = (svgBoundBox.max.y - svgBoundBox.min.y);
+        var maxBbExtent = (svgWidth>svgHeight) ? svgWidth : svgHeight;
+        // Now make the rectangular base plate
         var basePlate = new THREE.BoxGeometry(
-            options.typeSize+options.baseBuffer,
-            options.typeSize+options.baseBuffer,
+            maxBbExtent+options.baseBuffer,
+            maxBbExtent+options.baseBuffer,
             options.baseDepth );
         basePlateMesh = new THREE.Mesh(basePlate, options.material);
     }
     // Otherwise a circle
     else {
-        var radius = Math.sqrt(
-            Math.pow((options.typeSize/2),  2) +
-            Math.pow((options.typeSize/2), 2)) + options.baseBuffer;
+        // Find SVG bounding radius
+        var svgBoundRadius = svgMesh.geometry.boundingSphere.radius;
+        //var radius = Math.sqrt(
+        //    Math.pow((maxBbExtent/2),  2) +
+        //    Math.pow((maxBbExtent/2), 2)) + options.baseBuffer;
         var basePlate = new THREE.CylinderGeometry(
-            radius,
-            radius,
+            svgBoundRadius + options.baseBuffer,
+            svgBoundRadius + options.baseBuffer,
             options.baseDepth,
             64 );	// Number of faces around the cylinder
         basePlateMesh = new THREE.Mesh(basePlate, options.material);
@@ -105,6 +116,7 @@ function getBasePlateObject( options ) {
     return basePlateMesh;
 }
 
+// Creates a three.js Mesh object out of SVG paths
 function getExtrudedSvgObject( paths, options ) {
     options.bevelEnabled = (options.typeDepth<0 || !options.wantBasePlate) ?
         false : options.bevelEnabled;
@@ -124,23 +136,36 @@ function getExtrudedSvgObject( paths, options ) {
         options.typeDepth = -1 * options.baseDepth;
     }
 
-    // Extrude all the shapes
+    // Extrude all the shapes WITHOUT BEVEL
     var extruded = new THREE.ExtrudeGeometry( shapes, {
-        amount: (options.bevelEnabled) ? 0 : options.typeDepth,
-        bevelEnabled: options.bevelEnabled,
-        bevelThickness: options.typeDepth,
-        bevelSize: options.typeDepth/4,
-        bevelSegments: 1,	// Single, 45 degree bevel, not rounded
+        amount: options.typeDepth,
+        bevelEnabled: false
     });
 
+    // Find the bounding box of this extrusion with no bevel
+    // there's probably a smarter way to get a bounding box without extruding...
+    extruded.computeBoundingBox();
+    var svgWidth  = (extruded.boundingBox.max.x - extruded.boundingBox.min.x);
+    var svgHeight = (extruded.boundingBox.max.y - extruded.boundingBox.min.y);
+    var maxBbExtent = (svgWidth>svgHeight) ? svgWidth : svgHeight;
+
+    // Extrude with bevel instead if requested.
     if(options.bevelEnabled) {
-        // Bevels are actually created by extruding the object further than requested.
-        // We need to slice the object in the plane of the build plate
-        //var plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-        //extruded = sliceGeometry(extruded, plane);
+        extruded = new THREE.ExtrudeGeometry( shapes, {
+            amount: (options.bevelEnabled) ? 0 : options.typeDepth,
+            bevelEnabled: options.bevelEnabled,
+            bevelThickness: options.typeDepth,
+            // Since we're going to scale X/Y shortly, but not Z,
+            // Precompute this to account for X/Y scaling
+            // So that we maintain a 45 deg bevel
+            // (could also have extruded more, then scaled in all 3 dimensions after)
+            bevelSize: options.typeDepth * (maxBbExtent / options.typeSize),
+            bevelSegments: 1,	// Single-face, angled bevel
+        });
     }
 
     // Use negative scaling to invert the image
+    // Why do we have to flip the image to keep original SVG orientation?
     if(!options.wantInvertedType) {
         var invertTransform = new THREE.Matrix4().makeScale( -1, 1, 1 );
         extruded.applyMatrix( invertTransform );
@@ -148,19 +173,17 @@ function getExtrudedSvgObject( paths, options ) {
       
     // Into a mesh of triangles
     var mesh = new THREE.Mesh(extruded, options.material);
-    // Get bounding box of extruded content
-    var boundBox = new THREE.Box3().setFromObject(mesh);
-    var svgWidth  = (boundBox.max.x - boundBox.min.x);
-    var svgHeight = (boundBox.max.y - boundBox.min.y);
-    var maxBbExtent = (svgWidth>svgHeight) ? svgWidth : svgHeight;
+
     // Scale to requested size (lock aspect ratio)
     var scaleTransform = new THREE.Matrix4().makeScale(
-        (options.typeSize  / maxBbExtent),	// locking aspect ratio by scaling
-        (options.typeSize  / maxBbExtent),	// the largest dimension to that requested
-        1 );				// Keep the depth as-is
+        (options.typeSize  / maxBbExtent),  // locking aspect ratio by scaling
+        (options.typeSize  / maxBbExtent),  // the largest dimension to that requested
+        1 );                                // Keep the depth as-is
     mesh.geometry.applyMatrix( scaleTransform );
+
     // Center on X/Y origin
-    boundBox = new THREE.Box3().setFromObject(mesh);
+    mesh.geometry.computeBoundingBox();
+    boundBox = mesh.geometry.boundingBox;
     var translateTransform = new THREE.Matrix4().makeTranslation(
         // Half its width left
         -(Math.abs((boundBox.max.x-boundBox.min.x)/2)+boundBox.min.x),
@@ -169,42 +192,15 @@ function getExtrudedSvgObject( paths, options ) {
         // Don't mess with the depth 
         0 );					
     mesh.geometry.applyMatrix( translateTransform );
-    // Rotate 180 deg CCW
+
+    // Rotate 180 deg
+    // Why is this required? Different coordinate systems for SVG and three.js?
     var rotateTransform = new THREE.Matrix4().makeRotationZ( Math.PI );
     mesh.geometry.applyMatrix( rotateTransform );
+
+    // So that these attributes of the mesh are populated for later
+    mesh.geometry.computeBoundingBox();
+    mesh.geometry.computeBoundingSphere();
     return mesh;
-};
-
-var init3d = function(){
-    /// Global : renderer
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setClearColor( 0xb0b0b0 );
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
-
-    /// Global : scene
-    scene = new THREE.Scene();
-
-    /// Global : camera
-    camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 1000 );
-    camera.position.set( 0, 0, 200 );
-
-    /// Global : group
-    group = new THREE.Group();
-    scene.add( group );
-
-    /// direct light
-    var light = new THREE.DirectionalLight( 0x404040 );
-    light.position.set( 0.75, 0.75, 1.0 ).normalize();
-    scene.add( light );
-
-    /// ambient light
-    var ambientLight = new THREE.AmbientLight(0x404040);
-    scene.add( ambientLight );
-
-    /// backgroup grids
-    var helper = new THREE.GridHelper( 80, 10 );
-    helper.rotation.x = Math.PI / 2;
-    group.add( helper );
 };
 
