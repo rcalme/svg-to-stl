@@ -9,7 +9,9 @@
     <!-- Turn an SVG path into a three.js geometry -->
     <script src="js/external/d3-threeD.js"></script>
     <!-- Write a three.js geometry into ASCII STL -->
-    <script src="js/external/STLExporter.js"></script>
+    <script src="js/external/d3-threeD.js"></script>
+    <!-- "Flatten" an SVG document by applying all transforms to the paths -->
+    <script src="js/external/flatten.js"></script>
     <!-- Constructive Solid Geometry -->
     <script src="js/external/ThreeCSG.js"></script>
     <!-- In-memory file reads and writes -->
@@ -66,7 +68,7 @@
             <label class="title"></label>
             <div class="column column1">
               <label>
-                <input type="checkbox" name="checkbox[]" id="invertType" value="Invert Type" checked/>
+                <input type="checkbox" name="checkbox[]" id="invertType" value="Invert Type"/>
                 <span>Invert Type</span>
               </label>
             </div>
@@ -237,7 +239,7 @@
             typeSize: Math.abs(Number($("input#typeSize").val())),
             typeDepth: Number($("input#typeDepth").val()),
             wantInvertedType: $("input#invertType").prop("checked"),
-            svgWindingIsCW: $("input#reverseWO").prop("checked,"),
+            svgWindingIsCW: $("input#reverseWO").prop("checked"),
             bevelEnabled: $("input#bevel").prop("checked"),
             wantBasePlate: $("input#wantBasePlate").prop("checked"),
             basePlateShape: $("input[name=baseShape]:checked").val(),
@@ -274,6 +276,8 @@
           console.log("Parsing SVG paths...");
           // Get the paths out of the SVG
           var svgDoc = $.parseXML(e.target.result);
+          // "Flatten" the SVG by applying all transforms to shapes and paths
+          flatten(svgDoc.children[0]);
           // Write to global paths variable. Is there an easy way to return from a closure?
           paths = $("path", svgDoc).map(function(){return $(this).attr("d");}).get();
           // Store the file name in a global
