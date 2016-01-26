@@ -24,6 +24,7 @@ There are example SVG files in [example-svg/Entypo].
     - You can try the "Reverse Winding Order" option to fix this, but it's possible to have both combinations of winding in the same file, ensuring that some part is always inside out.
   - A hole that is not a hole, but an additional shape filled with background color will not render as a hole.
   - SVG text elements are not supported. To render text, you need to convert the text to "outlines" or "paths" before saving the SVG file.
+  - SVG paths that include scientific notation cause d3-threeD to loop infinitely. Saving as "Optimized SVG" in Inkscape ensures that this format is not used.
 
 ### Requirements
 This tool requires javascript support, and a browser that can handle a [WebGL] canvas, and the [File API].
