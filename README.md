@@ -35,7 +35,7 @@ This tool requires javascript support, and a browser that can handle a [WebGL] c
 ### Tools Used
 svg-to-stl makes use of a number of other open source projects:
 * [three.js] - For WebGL rendering of a 3D scene
-* [D3] - For converting SVG paths into three.js geometries
+* [d3-threeD] - For converting SVG paths into three.js geometries
 * [flatten.js] - For applying all heirarchical transforms in an SVG to its paths
 * [ThreeCSG] - For [Constructive Solid Geometry] support
 * [STLExporter] - For converting a three.js geometry into an ASCII STL file
@@ -53,7 +53,7 @@ svg-to-stl makes use of a number of other open source projects:
    [File API]: <http://www.w3.org/TR/FileAPI/>
    [Constructive Solid Geometry]: <https://en.wikipedia.org/wiki/Constructive_solid_geometry>
    [three.js]: <https://github.com/mrdoob/three.js>
-   [D3]: <https://github.com/mbostock/d3>
+   [d3-threeD]: <https://github.com/asutherland/d3-threeD>
    [flatten.js]: <https://gist.github.com/timo22345/9413158>
    [ThreeCSG]: <https://github.com/chandlerprall/ThreeCSG>
    [STLExporter]: <https://gist.github.com/kjlubick/fb6ba9c51df63ba0951f>
