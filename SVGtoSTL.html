@@ -178,7 +178,7 @@
             e.preventDefault();
             // Numeric validations would go here
             clearGroup(group);
-            renderObject(paths, scene, group, getFormSelections());
+            renderObject(svgPaths, scene, group, getFormSelections());
             return true;
         });   
         // Disable some options that don't apply when base plate is off
@@ -279,13 +279,13 @@
           // "Flatten" the SVG by applying all transforms to shapes and paths
           flatten(svgDoc.children[0]);
           // Write to global paths variable. Is there an easy way to return from a closure?
-          paths = $("path", svgDoc).map(function(){return $(this).attr("d");}).get();
+          svgPaths = $("path", svgDoc).map(function(){return $(this).attr("d");}).get();
           // Store the file name in a global
           fileName = uploadedFile.name;
           // In case this is the second file uploaded.
           clearGroup(group);
           // Render the SVG for the first time
-          renderObject(paths, scene, group, getFormSelections());
+          renderObject(svgPaths, scene, group, getFormSelections());
         };
       })(file);
 
