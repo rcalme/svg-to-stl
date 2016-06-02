@@ -39,6 +39,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
+SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(toElement) {
+    return toElement.getScreenCTM().inverse().multiply(this.getScreenCTM());
+};
+
 (function ()
 {
   var p2s = /,?([achlmqrstvxz]),?/gi;
@@ -358,17 +363,17 @@ THE SOFTWARE.
         h = b.height;
 
       // Validity checks from http://www.w3.org/TR/SVG/shapes.html#RectElement:
-      // If neither â€˜rxâ€™ nor â€˜ryâ€™ are properly specified, then set both rx and ry to 0. (This will result in square corners.)
+      // If neither ‘rx’ nor ‘ry’ are properly specified, then set both rx and ry to 0. (This will result in square corners.)
       if (!valid(rx) && !valid(ry)) rx = ry = 0;
-      // Otherwise, if a properly specified value is provided for â€˜rxâ€™, but not for â€˜ryâ€™, then set both rx and ry to the value of â€˜rxâ€™.
+      // Otherwise, if a properly specified value is provided for ‘rx’, but not for ‘ry’, then set both rx and ry to the value of ‘rx’.
       else if (valid(rx) && !valid(ry)) ry = rx;
-      // Otherwise, if a properly specified value is provided for â€˜ryâ€™, but not for â€˜rxâ€™, then set both rx and ry to the value of â€˜ryâ€™.
+      // Otherwise, if a properly specified value is provided for ‘ry’, but not for ‘rx’, then set both rx and ry to the value of ‘ry’.
       else if (valid(ry) && !valid(rx)) rx = ry;
       else
       {
-        // If rx is greater than half of â€˜widthâ€™, then set rx to half of â€˜widthâ€™.
+        // If rx is greater than half of ‘width’, then set rx to half of ‘width’.
         if (rx > w / 2) rx = w / 2;
-        // If ry is greater than half of â€˜heightâ€™, then set ry to half of â€˜heightâ€™.
+        // If ry is greater than half of ‘height’, then set ry to half of ‘height’.
         if (ry > h / 2) ry = h / 2;
       }
 
@@ -535,7 +540,7 @@ THE SOFTWARE.
     return r;
   }
 
-  // Parts of RaphaÃ«l 2.1.0 (MIT licence: http://raphaeljs.com/license.html)
+  // Parts of Raphaël 2.1.0 (MIT licence: http://raphaeljs.com/license.html)
   // Contains eg. bugfixed path2curve() function
 
   var R = {};
