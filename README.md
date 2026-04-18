@@ -1,8 +1,11 @@
 # SVG to STL Converter
+
+*rahji: I forked the original repo just so it could be shared via GitHub Pages. Use the URL to the right or just click here: https://rahji.github.io/svg-to-stl*
+
 Created to enable the 3D printing of plates for a [printing press] from a 2D vector graphic, this tool runs entirely in the local browser. As the name implies, it takes a [scalable vector graphics] \(SVG\) file as input, and produces an ASCII [stereo-lithography] \(STL\) file as output.
 
 ### Demo
-You can try the tool [hosted directly from github].
+You can try the tool [hosted directly from github](https://rahji.github.io/svg-to-stl/).
 
 There are example SVG files in [example-svg/Entypo].
 
